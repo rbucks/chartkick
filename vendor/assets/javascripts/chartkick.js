@@ -1640,6 +1640,33 @@
     });
   };
 
+  defaultExport.prototype.renderSankeyChart = function renderSankeyChart (chart) {
+      var this$1$1 = this;
+
+    this.waitForLoaded(chart, function () {
+      var chartOptions = {
+        width: 900,
+        height: 600,
+        sankey: {
+          node: {
+            interactivity: true
+          }
+        }
+      };
+      var options = jsOptions(chart, chart.options, chartOptions);
+      google.charts.load('current', {'packages':['sankey']});
+      var data = new google.visualization.DataTable();
+      data.addColumn({type: "string", id: "From"});
+      data.addColumn({type: "string", id: "To"});
+      data.addColumn({type: "number", id: "Weight"});
+      data.addRows(chart.data);
+
+      chart.chart = new google.visualization.Sankey(chart.element);
+
+      this$1$1.drawChart(chart, "SankeyChart", data, options);
+    });
+  }; 
+
   defaultExport.prototype.renderTimeline = function renderTimeline (chart) {
       var this$1$1 = this;
 
@@ -2528,6 +2555,26 @@
     return Timeline;
   }(Chart));
 
+  var Sankey = /*@__PURE__*/(function (Chart) {
+    function Sankey () {
+      Chart.apply(this, arguments);
+    }
+
+    if ( Chart ) Sankey.__proto__ = Chart;
+    Sankey.prototype = Object.create( Chart && Chart.prototype );
+    Sankey.prototype.constructor = Sankey;
+
+    Sankey.prototype.__processData = function __processData () {
+      return processSeries(this);
+    };
+
+    Sankey.prototype.__chartName = function __chartName () {
+      return "Sankey";
+    };
+
+    return Sankey;
+  }(Chart));
+
   Chartkick.LineChart = LineChart;
   Chartkick.PieChart = PieChart;
   Chartkick.ColumnChart = ColumnChart;
@@ -2537,6 +2584,7 @@
   Chartkick.ScatterChart = ScatterChart;
   Chartkick.BubbleChart = BubbleChart;
   Chartkick.Timeline = Timeline;
+  Chartkick.Sankey = Sankey;
 
   // not ideal, but allows for simpler integration
   if (typeof window !== "undefined" && !window.Chartkick) {

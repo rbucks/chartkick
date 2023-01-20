@@ -32,6 +32,10 @@ module Chartkick
       chartkick_chart "Timeline", data_source, **options
     end
 
+    def sankey(data_source, **options)
+      chartkick_chart "Sankey", data_source, **options
+    end
+
     private
 
     # don't break out options since need to merge with default options
